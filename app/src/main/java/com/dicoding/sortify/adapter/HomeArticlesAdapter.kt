@@ -2,7 +2,6 @@ package com.dicoding.sortify.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,13 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.sortify.R
 import com.dicoding.sortify.data.remote.response.ArticlesItem
-import com.dicoding.sortify.databinding.ItemArticleBinding
+import com.dicoding.sortify.databinding.ItemArticleHomeBinding
 import com.dicoding.sortify.ui.article.DetailArticleActivity
 
-class ArticleAdapter : ListAdapter<ArticlesItem, ArticleAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
+class HomeArticlesAdapter : ListAdapter<ArticlesItem, HomeArticlesAdapter.MyViewHolder>(
+    DIFF_CALLBACK
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemArticleHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
@@ -26,14 +28,13 @@ class ArticleAdapter : ListAdapter<ArticlesItem, ArticleAdapter.MyViewHolder>(DI
         holder.bind(news)
     }
 
-    class MyViewHolder(private val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(private val binding: ItemArticleHomeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(news: ArticlesItem) {
-            binding.tvHeadlineArticle.text = news.title
-            binding.tvDescription.text = news.content
+            binding.tvArticleTitle1.text = news.title?.let { truncateTitle(it) }
             Glide.with(itemView.context)
                 .load(news.image)
                 .error(R.drawable.ic_no_image)
-                .into(binding.imageView)
+                .into(binding.imgArticle1)
 
             itemView.setOnClickListener {
 //                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(news.link))
@@ -43,6 +44,16 @@ class ArticleAdapter : ListAdapter<ArticlesItem, ArticleAdapter.MyViewHolder>(DI
                 intent.putExtra("title", news.title)
                 intent.putExtra("image", news.image)
                 itemView.context.startActivity(intent)
+            }
+
+
+        }
+
+        private fun truncateTitle(title: String): String {
+            return if (title.length > 20) {
+                "${title.substring(0, 20)}..."
+            } else {
+                title
             }
         }
     }
