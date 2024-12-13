@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.sortify.databinding.ActivityArticleBinding
 import com.dicoding.sortify.adapter.ArticleAdapter
-import com.dicoding.sortify.data.remote.retrofit.ApiConfig
+import com.dicoding.sortify.data.remote.retrofit.ApiConfigNews
 import com.dicoding.sortify.data.repository.ArticleRepository
 
 class ArticleActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class ArticleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityArticleBinding
 
     private val articleViewModel: ArticleViewModel by viewModels {
-        ArticleViewModelFactory(ArticleRepository.getInstance(ApiConfig.getApiService()))
+        ArticleViewModelFactory(ArticleRepository.getInstance(ApiConfigNews.getApiService()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
